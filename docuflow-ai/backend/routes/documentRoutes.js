@@ -21,7 +21,7 @@
  */
 import { Router } from 'express';
 import { asyncHandler } from '../middleware/errorMiddleware.js';
-import { requireAuth } from '../middleware/authMiddleware.js';
+import { requireAuth, authFromHeaderOrQuery } from '../middleware/authMiddleware.js';
 import { uploadSingle, uploadPair, assertValidFile } from '../middleware/uploadMiddleware.js';
 import {
   uploadDocument,
@@ -41,13 +41,16 @@ import {
 const router = Router();
 
 // All document routes require authentication.
+// ---- Static-ish paths first so they are not captured by `/:id` ----
+// The file route is registered before `requireAuth` because it is rendered by
+// an <iframe>/<img>, which cannot send an Authorization header.
+router.get('/file/:path', authFromHeaderOrQuery, asyncHandler(streamDocumentFile));
+
 router.use(requireAuth);
 
-// ---- Static-ish paths first so they are not captured by `/:id` ----
 router.get('/stats', asyncHandler(getStats));
 router.get('/search', asyncHandler(searchDocuments));
 router.get('/config', asyncHandler(getRuntimeConfig));
-router.get('/file/:path', asyncHandler(streamDocumentFile));
 
 router.post('/upload', uploadSingle(), asyncHandler(uploadDocument));
 router.post('/compare', asyncHandler(compareDocumentsEndpoint));

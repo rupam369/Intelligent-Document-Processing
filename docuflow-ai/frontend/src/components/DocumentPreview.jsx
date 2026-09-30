@@ -5,7 +5,7 @@
  * OCR text that the pipeline actually read.
  */
 import { useState } from 'react';
-import { api } from '../services/api.js';
+import { api, tokenStore } from '../services/api.js';
 import { fileExtension, formatBytes } from '../utils/format.js';
 
 export default function DocumentPreview({ document }) {
@@ -13,8 +13,8 @@ export default function DocumentPreview({ document }) {
   const extension = fileExtension(document.fileName);
   const isImage = ['JPG', 'JPEG', 'PNG'].includes(extension);
   // Prefer the backend-provided URL (a signed Supabase URL in production),
-  // falling back to the authenticated proxy route.
-  const fileUrl = document.fileUrl || api.fileUrl(document.id, document.filePath);
+  // falling back to the authenticated proxy route with a query token.
+  const fileUrl = document.fileUrl || api.fileUrl(document.id, document.filePath, tokenStore.get());
 
   return (
     <div className="preview-pane">

@@ -38,16 +38,20 @@ app.disable('x-powered-by');
 app.set('trust proxy', 1);
 
 // ---- CORS ----
+// The browser sends an `Origin` header on every non-GET request, including
+// same-origin POSTs. When the app is served through a sandbox/preview host that
+// origin is not in the allowlist, so development reflects any origin instead.
+// Production keeps the strict CORS_ORIGIN allowlist.
+const isDev = !config.isProduction;
+
 app.use(
   cors({
     origin(origin, callback) {
-      // Allow same-origin / server-to-server requests with no Origin header.
+      // No Origin header (curl, server-to-server, same-origin GET) - allow.
       if (!origin) return callback(null, true);
       if (config.corsOrigins.includes(origin)) return callback(null, true);
-      // Be permissive in development so any Vite port works.
-      if (!config.isProduction && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
-        return callback(null, true);
-      }
+      // Development / preview hosts (localhost, 127.0.0.1, sandbox proxies).
+      if (isDev) return callback(null, true);
       return callback(new Error(`Origin ${origin} is not allowed by CORS.`));
     },
     credentials: true,

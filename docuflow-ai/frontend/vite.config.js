@@ -28,6 +28,13 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 4173,
     allowedHosts: true,
+    // `vite preview` does not inherit `server.proxy`, so repeat it here.
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_PROXY_TARGET || 'http://localhost:5000',
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: 'dist',

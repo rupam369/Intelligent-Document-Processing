@@ -227,7 +227,16 @@ export const api = {
   },
 
   // ---- file preview ----
-  fileUrl: (id, storagePath) => `${API_URL}/documents/file/${encodeURIComponent(storagePath)}`,
+  /**
+   * URL for rendering the stored document in the browser.
+   * An <iframe>/<img> cannot send an Authorization header, so the token is
+   * appended as a query parameter. The backend only accepts this on the
+   * document file route.
+   */
+  fileUrl: (id, storagePath, token) => {
+    const url = `${API_URL}/documents/file/${encodeURIComponent(storagePath)}`;
+    return token ? `${url}?access_token=${encodeURIComponent(token)}` : url;
+  },
 };
 
 export default api;

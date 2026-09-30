@@ -44,4 +44,37 @@ export async function optionalAuth(request, _response, next) {
   next();
 }
 
-export default { requireAuth, optionalAuth };
+/**
+ * Auth for resources rendered by the browser itself (iframe / img).
+ *
+ * An <iframe> or <img> cannot send an Authorization header, so this variant
+ * also accepts `?access_token=`. It is intentionally scoped to the document
+ * file route only - every other route uses `requireAuth`, which ignores query
+ * tokens entirely. In production the backend hands out a short-lived signed
+ * Supabase URL instead, so this fallback is only exercised in local/demo mode.
+ */
+export async function authFromHeaderOrQuery(request, response, next) {
+  try {
+    const header = request.headers.authorization || '';
+    let token = header.startsWith('Bearer ') ? header.slice(7).trim() : '';
+    if (!token && typeof request.query?.access_token === 'string') {
+      token = request.query.access_token.trim();
+    }
+
+    if (!token) {
+      throw new AuthenticationError('Please sign in to continue.');
+    }
+
+    const user = await resolveToken(token);
+    if (!user) {
+      throw new AuthenticationError('Your session has expired. Please sign in again.');
+    }
+
+    request.user = user;
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+export default { requireAuth, optionalAuth, authFromHeaderOrQuery };
