@@ -45,7 +45,7 @@ export default function Settings({ capabilities, onRefresh }) {
       </div>
 
       <div className="detail-grid">
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 0 }}>
           <div className="card-header">
             <div>
               <h3>Account</h3>
@@ -83,7 +83,7 @@ export default function Settings({ capabilities, onRefresh }) {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 1 }}>
           <div className="card-header">
             <div>
               <h3>Processing engines</h3>
@@ -145,7 +145,7 @@ export default function Settings({ capabilities, onRefresh }) {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card df-enter" style={{ '--i': 2 }}>
         <div className="card-header">
           <div>
             <h3>Upload policy</h3>
@@ -170,7 +170,7 @@ export default function Settings({ capabilities, onRefresh }) {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card df-enter" style={{ '--i': 3 }}>
         <div className="card-header">
           <div>
             <h3>Security</h3>

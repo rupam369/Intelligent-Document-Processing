@@ -113,7 +113,7 @@ export default function Review({ onReviewed }) {
             <p>Documents that need a human decision appear here.</p>
           </div>
         </div>
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 0 }}>
           <div className="card-body">
             <EmptyState
               icon="✓"
@@ -149,7 +149,7 @@ export default function Review({ onReviewed }) {
 
       <div className="detail-grid">
         {/* Queue */}
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 1 }}>
           <div className="card-header">
             <div>
               <h3>Review queue</h3>
@@ -197,14 +197,14 @@ export default function Review({ onReviewed }) {
         {/* Reviewer workspace */}
         <div className="detail-stack">
           {detailLoading || !current ? (
-            <div className="card">
+            <div className="card df-enter" style={{ '--i': 2 }}>
               <div className="card-body">
                 <Loading label="Loading document..." />
               </div>
             </div>
           ) : (
             <>
-              <div className="card">
+              <div className="card df-enter" style={{ '--i': 3 }}>
                 <div className="card-header">
                   <div>
                     <h3 className="truncate" style={{ maxWidth: 260 }}>
@@ -235,7 +235,7 @@ export default function Review({ onReviewed }) {
                 </div>
               </div>
 
-              <div className="card">
+              <div className="card df-enter" style={{ '--i': 4 }}>
                 <div className="card-header">
                   <div>
                     <h3>Extracted data</h3>

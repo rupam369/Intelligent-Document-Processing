@@ -36,7 +36,11 @@ export default function ValidationResult({ results, summary }) {
 
       <div className="validation-list">
         {results.map((result, index) => (
-          <div key={`${result.rule_name}-${index}`} className={`validation-item ${result.status}`}>
+          <div
+            key={`${result.rule_name}-${index}`}
+            className={`validation-item ${result.status}`}
+            style={{ '--i': index }}
+          >
             <span className={`validation-icon ${result.status}`}>{ICONS[result.status] || '·'}</span>
             <div className="validation-body">
               <div className="validation-title">

@@ -13,6 +13,7 @@ import ExtractedDataTable from '../components/ExtractedDataTable.jsx';
 import ValidationResult from '../components/ValidationResult.jsx';
 import ChatBox from '../components/ChatBox.jsx';
 import ExportButtons from '../components/ExportButtons.jsx';
+import Reveal from '../components/Reveal.jsx';
 import StatusBadge from '../components/StatusBadge.jsx';
 import ConfidenceBadge from '../components/ConfidenceBadge.jsx';
 import { Loading, ErrorState } from '../components/States.jsx';
@@ -197,12 +198,12 @@ export default function DocumentDetails({ onDocumentsChanged }) {
 
       <div className="detail-grid">
         {/* LEFT: original document */}
-        <div className="detail-stack">
+        <Reveal index={0} className="detail-stack" variant="left">
           <DocumentPreview document={document} />
-        </div>
+        </Reveal>
 
         {/* RIGHT: everything the pipeline learned */}
-        <div className="detail-stack">
+        <Reveal index={1} className="detail-stack" variant="right">
           <div className="card">
             <div className="card-header">
               <div>
@@ -302,7 +303,7 @@ export default function DocumentDetails({ onDocumentsChanged }) {
               </div>
             </div>
           ) : null}
-        </div>
+        </Reveal>
       </div>
 
       {/* Tabs for chat / export / logs */}
@@ -319,7 +320,7 @@ export default function DocumentDetails({ onDocumentsChanged }) {
       </div>
 
       {tab === 'details' ? (
-        <div className="card">
+        <div key="details" className="card df-enter">
           <div className="card-header">
             <div>
               <h3>Field detail</h3>
@@ -347,7 +348,7 @@ export default function DocumentDetails({ onDocumentsChanged }) {
       ) : null}
 
       {tab === 'validation' ? (
-        <div className="card">
+        <div key="validation" className="card df-enter">
           <div className="card-header">
             <div>
               <h3>Validation results</h3>
@@ -361,7 +362,7 @@ export default function DocumentDetails({ onDocumentsChanged }) {
       ) : null}
 
       {tab === 'chat' ? (
-        <div className="card">
+        <div key="chat" className="card df-enter">
           <div className="card-header">
             <div>
               <h3>AI document chat</h3>
@@ -375,7 +376,7 @@ export default function DocumentDetails({ onDocumentsChanged }) {
       ) : null}
 
       {tab === 'export' ? (
-        <div className="card">
+        <div key="export" className="card df-enter">
           <div className="card-header">
             <div>
               <h3>Export</h3>
@@ -404,7 +405,7 @@ export default function DocumentDetails({ onDocumentsChanged }) {
       ) : null}
 
       {tab === 'logs' ? (
-        <div className="card">
+        <div key="logs" className="card df-enter">
           <div className="card-header">
             <div>
               <h3>Processing log</h3>

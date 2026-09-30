@@ -68,7 +68,7 @@ export default function Analytics() {
       </div>
 
       {!totals.documents ? (
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 0 }}>
           <div className="card-body">
             <EmptyState
               icon="◔"
@@ -105,7 +105,7 @@ export default function Analytics() {
       </div>
 
       <div className="chart-grid">
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 1 }}>
           <div className="card-header">
             <div>
               <h3>Document type distribution</h3>
@@ -117,7 +117,7 @@ export default function Analytics() {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 2 }}>
           <div className="card-header">
             <div>
               <h3>Documents by type</h3>
@@ -131,7 +131,7 @@ export default function Analytics() {
       </div>
 
       <div className="chart-grid">
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 3 }}>
           <div className="card-header">
             <div>
               <h3>Pipeline status</h3>
@@ -143,7 +143,7 @@ export default function Analytics() {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 4 }}>
           <div className="card-header">
             <div>
               <h3>Average confidence by type</h3>
@@ -172,7 +172,7 @@ export default function Analytics() {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card df-enter" style={{ '--i': 5 }}>
         <div className="card-header">
           <div>
             <h3>Status breakdown</h3>

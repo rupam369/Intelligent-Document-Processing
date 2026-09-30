@@ -99,7 +99,7 @@ export default function Upload({ onUploaded }) {
         <div className="stack md">
           <UploadBox onUploaded={handleUploaded} />
 
-          <div className="card">
+          <div className="card df-enter" style={{ '--i': 0 }}>
             <div className="card-header">
               <div>
                 <h3>What happens next</h3>
@@ -121,7 +121,7 @@ export default function Upload({ onUploaded }) {
 
         <div className="stack md">
           {active ? (
-            <div className="card">
+            <div className="card df-enter" style={{ '--i': 1 }}>
               <div className="card-header">
                 <div>
                   <h3 className="truncate" style={{ maxWidth: 240 }}>
@@ -145,7 +145,7 @@ export default function Upload({ onUploaded }) {
               </div>
             </div>
           ) : (
-            <div className="card">
+            <div className="card df-enter" style={{ '--i': 2 }}>
               <div className="card-header">
                 <div>
                   <h3>Processing status</h3>

@@ -39,6 +39,12 @@ export default function Login() {
 
   return (
     <div className="auth-shell">
+      <div className="df-aurora" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
+
       <div className="auth-hero">
         <div className="row" style={{ gap: 10 }}>
           <span className="navbar-logo" style={{ background: 'rgba(255,255,255,0.2)' }}>DF</span>
@@ -50,8 +56,8 @@ export default function Login() {
           numbers, and chat with it - all in one workspace.
         </p>
         <div className="auth-features">
-          {FEATURES.map((feature) => (
-            <div key={feature.title} className="auth-feature">
+          {FEATURES.map((feature, index) => (
+            <div key={feature.title} className="auth-feature" style={{ '--i': index }}>
               <span className="auth-feature-icon">{feature.icon}</span>
               <div>
                 <strong>{feature.title}</strong>

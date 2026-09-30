@@ -38,15 +38,18 @@ export default function ExtractedDataTable({
           </tr>
         </thead>
         <tbody>
-          {entries.map(([name, entry]) => {
+          {entries.map(([name, entry], rowIndex) => {
             const review = reviewState[name] || {};
             const label = schema?.[name]?.label || humanise(name);
             const isMoney = entry?.unit === 'currency';
 
             return (
-              <tr key={name}>
+              <tr key={name} className="df-enter" style={{ '--i': rowIndex }}>
                 <td>
-                  <div className={`field-row ${review.rejected ? 'rejected' : ''}`}>
+                  <div
+                    className={`field-row ${review.rejected ? 'rejected' : ''}`}
+                    style={{ '--i': rowIndex }}
+                  >
                     <div>
                       <div className="field-name">{label}</div>
                       <div className="field-label mono">{name}</div>

@@ -6,11 +6,14 @@ import StatusBadge from './StatusBadge.jsx';
 import ConfidenceBadge from './ConfidenceBadge.jsx';
 import { documentTypeLabel, formatRelative, fileExtension } from '../utils/format.js';
 
-export default function DocumentCard({ document, onDelete }) {
+export default function DocumentCard({ document, onDelete, index = 0 }) {
   const isProcessing = document.status === 'processing';
 
   return (
-    <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+    <div
+      className="card df-lift df-enter"
+      style={{ display: 'flex', flexDirection: 'column', '--i': index }}
+    >
       <div className="card-body" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div className="row between">
           <span className="badge neutral">{fileExtension(document.fileName)}</span>

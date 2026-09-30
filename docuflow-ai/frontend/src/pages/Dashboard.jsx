@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom';
 import { api } from '../services/api.js';
 import { StatCard, Loading, ErrorState, EmptyState } from '../components/States.jsx';
 import { DonutChart, ColumnChart } from '../components/Charts.jsx';
+import Reveal from '../components/Reveal.jsx';
 import StatusBadge from '../components/StatusBadge.jsx';
 import ConfidenceBadge from '../components/ConfidenceBadge.jsx';
-import { documentTypeLabel, formatRelative, formatPercent } from '../utils/format.js';
+import { documentTypeLabel, formatRelative } from '../utils/format.js';
 
 export default function Dashboard({ onDocumentsChanged }) {
   const [stats, setStats] = useState(null);
@@ -54,9 +55,10 @@ export default function Dashboard({ onDocumentsChanged }) {
       </div>
 
       <div className="stat-grid">
-        <StatCard label="Total documents" value={totals.documents} icon="▤" tone="brand" hint="All uploads in your workspace" />
-        <StatCard label="Processed" value={totals.processed} icon="✓" tone="success" hint="Verified or reviewed" />
+        <StatCard index={0} label="Total documents" value={totals.documents} icon="▤" tone="brand" hint="All uploads in your workspace" />
+        <StatCard index={1} label="Processed" value={totals.processed} icon="✓" tone="success" hint="Verified or reviewed" />
         <StatCard
+          index={2}
           label="Needing review"
           value={totals.needsReview}
           icon="!"
@@ -64,6 +66,7 @@ export default function Dashboard({ onDocumentsChanged }) {
           hint={totals.needsReview ? 'Waiting for a human decision' : 'Nothing pending'}
         />
         <StatCard
+          index={3}
           label="With errors"
           value={totals.withErrors}
           icon="×"
@@ -73,7 +76,7 @@ export default function Dashboard({ onDocumentsChanged }) {
       </div>
 
       <div className="chart-grid">
-        <div className="card">
+        <Reveal index={0} className="card">
           <div className="card-header">
             <div>
               <h3>Document type distribution</h3>
@@ -83,9 +86,9 @@ export default function Dashboard({ onDocumentsChanged }) {
           <div className="card-body">
             <DonutChart data={byType} />
           </div>
-        </div>
+        </Reveal>
 
-        <div className="card">
+        <Reveal index={1} className="card">
           <div className="card-header">
             <div>
               <h3>Status overview</h3>
@@ -110,10 +113,10 @@ export default function Dashboard({ onDocumentsChanged }) {
               <span className="kv-value">{totals.processing}</span>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
 
-      <div className="card">
+      <Reveal index={2} className="card">
         <div className="card-header">
           <div>
             <h3>Recent documents</h3>
@@ -138,8 +141,8 @@ export default function Dashboard({ onDocumentsChanged }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {recent.map((document) => (
-                    <tr key={document.id}>
+                  {recent.map((document, index) => (
+                    <tr key={document.id} className="df-enter" style={{ '--i': index }}>
                       <td className="cell-strong truncate" style={{ maxWidth: 240 }}>
                         {document.fileName}
                       </td>
@@ -174,10 +177,10 @@ export default function Dashboard({ onDocumentsChanged }) {
             />
           )}
         </div>
-      </div>
+      </Reveal>
 
       {totals.needsReview > 0 ? (
-        <div className="alert warning">
+        <Reveal index={3} className="alert warning">
           <span className="alert-icon">!</span>
           <div className="alert-body">
             <div className="alert-title">
@@ -188,7 +191,7 @@ export default function Dashboard({ onDocumentsChanged }) {
               <Link to="/review">Open the review queue</Link>.
             </div>
           </div>
-        </div>
+        </Reveal>
       ) : null}
     </div>
   );

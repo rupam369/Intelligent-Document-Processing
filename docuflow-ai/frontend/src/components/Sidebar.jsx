@@ -41,12 +41,13 @@ export default function Sidebar({ open, onClose, reviewCount = 0 }) {
 
         <nav className="sidebar-nav">
           <div className="sidebar-label">Workspace</div>
-          {LINKS.map((link) => (
+          {LINKS.map((link, index) => (
             <NavLink
               key={link.to}
               to={link.to}
               className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
               onClick={onClose}
+              style={{ '--i': index }}
             >
               <span className="icon">{link.icon}</span>
               {link.label}

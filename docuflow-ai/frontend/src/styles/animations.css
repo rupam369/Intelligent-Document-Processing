@@ -1,0 +1,416 @@
+/* ==========================================================================
+   DocuFlow AI - animation library
+   Dependency-free motion system. Every animation here degrades gracefully
+   under `prefers-reduced-motion: reduce` (see the block at the bottom).
+   ========================================================================== */
+
+:root {
+  /* Easing curves - a "spring-ish" overshoot and a smooth decelerate. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Durations */
+  --dur-fast: 140ms;
+  --dur: 240ms;
+  --dur-slow: 420ms;
+  --dur-slower: 680ms;
+
+  /* Stagger step used by `--i` index variables. */
+  --stagger: 55ms;
+}
+
+/* --------------------------------------------------------------------------
+   1. Keyframes
+   -------------------------------------------------------------------------- */
+
+@keyframes df-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes df-fade-up {
+  from { opacity: 0; transform: translate3d(0, 16px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes df-fade-down {
+  from { opacity: 0; transform: translate3d(0, -12px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes df-fade-left {
+  from { opacity: 0; transform: translate3d(20px, 0, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes df-fade-right {
+  from { opacity: 0; transform: translate3d(-20px, 0, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes df-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes df-pop-in {
+  0%   { opacity: 0; transform: scale(0.6); }
+  60%  { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes df-slide-up {
+  from { opacity: 0; transform: translate3d(0, 28px, 0) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes df-slide-in-right {
+  from { opacity: 0; transform: translate3d(110%, 0, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes df-shake {
+  0%, 100% { transform: translateX(0); }
+  18%  { transform: translateX(-6px); }
+  36%  { transform: translateX(5px); }
+  54%  { transform: translateX(-4px); }
+  72%  { transform: translateX(3px); }
+  88%  { transform: translateX(-1px); }
+}
+
+/* Soft breathing pulse for "needs attention" markers. */
+@keyframes df-pulse-soft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.82); }
+}
+
+/* Expanding ring used behind status dots. */
+@keyframes df-pulse-ring {
+  0%   { transform: scale(0.7); opacity: 0.55; }
+  70%  { transform: scale(2.1); opacity: 0; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+
+@keyframes df-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Light sweep across skeletons and glossy buttons. */
+@keyframes df-shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
+/* Bars / fills grow from the left (or bottom via scaleY). */
+@keyframes df-grow-x {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes df-grow-y {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* Slow drifting used by the ambient background blobs. */
+@keyframes df-float {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  33%  { transform: translate3d(3%, -4%, 0) scale(1.06); }
+  66%  { transform: translate3d(-3%, 3%, 0) scale(0.96); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* Animated gradient position for gradient text / borders. */
+@keyframes df-gradient-pan {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Draw-on effect for SVG strokes (charts, progress arcs). */
+@keyframes df-draw {
+  from { stroke-dashoffset: var(--dash-from, 1000); }
+  to   { stroke-dashoffset: var(--dash-to, 0); }
+}
+
+/* Chevrons / arrows nudging to suggest direction. */
+@keyframes df-nudge {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(3px); }
+}
+
+/* Three-dot "thinking" indicator. */
+@keyframes df-typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
+  30%           { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Upload dropzone halo. */
+@keyframes df-halo {
+  0%   { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.28); }
+  70%  { box-shadow: 0 0 0 14px rgba(79, 70, 229, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+}
+
+/* --------------------------------------------------------------------------
+   2. Entrance utilities
+   `--i` is a per-element index that produces a natural stagger.
+   -------------------------------------------------------------------------- */
+
+.df-enter {
+  animation: df-fade-up var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.df-enter-fade {
+  animation: df-fade-in var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.df-enter-left {
+  animation: df-fade-left var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.df-enter-right {
+  animation: df-fade-right var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.df-enter-scale {
+  animation: df-scale-in var(--dur-slow) var(--ease-spring) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.df-enter-pop {
+  animation: df-pop-in var(--dur-slower) var(--ease-spring) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+/* --------------------------------------------------------------------------
+   3. Scroll reveal
+   Elements start hidden and are switched on by `useInView`. If the observer
+   never runs the fallback in `Reveal.jsx` reveals them anyway, so content can
+   never get stuck invisible.
+   -------------------------------------------------------------------------- */
+
+.df-reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  will-change: opacity, transform;
+}
+
+.df-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-slower) var(--ease-out),
+    transform var(--dur-slower) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.df-reveal.from-left  { transform: translate3d(-26px, 0, 0); }
+.df-reveal.from-right { transform: translate3d(26px, 0, 0); }
+.df-reveal.from-scale { transform: scale(0.96); }
+
+/* --------------------------------------------------------------------------
+   4. Route transition
+   -------------------------------------------------------------------------- */
+
+.df-page {
+  animation: df-fade-up var(--dur-slow) var(--ease-out) both;
+}
+
+/* --------------------------------------------------------------------------
+   5. Reusable motion primitives
+   -------------------------------------------------------------------------- */
+
+.df-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.df-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  animation: df-shimmer 1.7s infinite;
+}
+
+.df-pulse {
+  animation: df-pulse-soft 1.9s var(--ease-in-out) infinite;
+}
+
+.df-float {
+  animation: df-float 18s var(--ease-in-out) infinite;
+}
+
+.df-spin {
+  animation: df-spin 0.85s linear infinite;
+}
+
+.df-nudge {
+  animation: df-nudge 1.4s var(--ease-in-out) infinite;
+}
+
+.df-shake {
+  animation: df-shake 0.5s var(--ease-in-out) both;
+}
+
+.df-gradient-text {
+  background: linear-gradient(100deg, #4f46e5, #7c3aed, #ec4899, #4f46e5);
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: df-gradient-pan 7s var(--ease-in-out) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   6. Hover / interaction affordances
+   -------------------------------------------------------------------------- */
+
+.df-lift {
+  transition:
+    transform var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+
+.df-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Glossy sweep that follows a hover on buttons / cards. */
+.df-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.df-sheen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  transform: skewX(-18deg);
+  transition: left 0.55s var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.df-sheen:hover::before {
+  left: 130%;
+}
+
+/* --------------------------------------------------------------------------
+   7. Ambient animated background
+   Three blurred blobs drifting behind the app shell.
+   -------------------------------------------------------------------------- */
+
+.df-aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.df-aurora span {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.5;
+}
+
+.df-aurora span:nth-child(1) {
+  width: 460px;
+  height: 460px;
+  top: -140px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.35), transparent 68%);
+  animation: df-float 22s var(--ease-in-out) infinite;
+}
+
+.df-aurora span:nth-child(2) {
+  width: 520px;
+  height: 520px;
+  top: 30%;
+  right: -160px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.26), transparent 68%);
+  animation: df-float 27s var(--ease-in-out) infinite reverse;
+}
+
+.df-aurora span:nth-child(3) {
+  width: 420px;
+  height: 420px;
+  bottom: -150px;
+  left: 34%;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.22), transparent 68%);
+  animation: df-float 32s var(--ease-in-out) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   8. Typing indicator (chat)
+   -------------------------------------------------------------------------- */
+
+.df-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.df-typing i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: df-typing 1.25s var(--ease-in-out) infinite;
+}
+
+.df-typing i:nth-child(2) { animation-delay: 0.16s; }
+.df-typing i:nth-child(3) { animation-delay: 0.32s; }
+
+/* --------------------------------------------------------------------------
+   9. Accessibility - respect the user's motion preference
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Reveal elements must never stay hidden when motion is switched off. */
+  .df-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .df-aurora {
+    display: none;
+  }
+}

@@ -67,7 +67,7 @@ export default function ProcessingStatus({ pipeline, status, progress, currentSt
       </div>
 
       <div className="pipeline">
-        {stages.map((stage) => {
+        {stages.map((stage, index) => {
           const isDone = done.has(stage.key) || (progress ?? 0) >= stage.progress;
           const isActive = currentStage === stage.key && status === 'processing';
           const isFailed = failed && isActive;
@@ -79,7 +79,7 @@ export default function ProcessingStatus({ pipeline, status, progress, currentSt
           else className += ' pending';
 
           return (
-            <div key={stage.key} className={className}>
+            <div key={stage.key} className={className} style={{ '--i': index }}>
               <span className="pipeline-marker">
                 {isFailed ? '!' : isDone ? '✓' : STAGE_ICONS[stage.key] || '·'}
               </span>

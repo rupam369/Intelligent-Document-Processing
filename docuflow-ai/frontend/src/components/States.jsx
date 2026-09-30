@@ -1,12 +1,18 @@
 /**
  * Shared loading / error / empty state components.
  */
+import AnimatedNumber from './AnimatedNumber.jsx';
+
 export function Loading({ label = 'Loading...', rows = 0 }) {
   if (rows > 0) {
     return (
       <div>
         {Array.from({ length: rows }).map((_, index) => (
-          <div key={index} className="skeleton skeleton-row" />
+          <div
+            key={index}
+            className="skeleton skeleton-row"
+            style={{ width: index % 3 === 2 ? '62%' : '100%' }}
+          />
         ))}
       </div>
     );
@@ -47,14 +53,21 @@ export function EmptyState({ icon = '◌', title, text, action }) {
   );
 }
 
-export function StatCard({ label, value, hint, icon, tone = 'brand' }) {
+export function StatCard({ label, value, hint, icon, tone = 'brand', index = 0 }) {
+  const numeric = typeof value === 'number' && Number.isFinite(value);
+
   return (
-    <div className="stat-card">
+    <div
+      className="stat-card df-enter"
+      style={{ '--i': index }}
+    >
       <div className="stat-top">
         <span className="stat-label">{label}</span>
         <span className={`stat-icon ${tone}`}>{icon}</span>
       </div>
-      <span className="stat-value">{value}</span>
+      <span className="stat-value">
+        {numeric ? <AnimatedNumber value={value} /> : value}
+      </span>
       {hint ? <span className="stat-hint">{hint}</span> : null}
     </div>
   );

@@ -1,5 +1,6 @@
 /**
  * Lightweight dependency-free charts (inline SVG).
+ * Every chart animates itself in on mount.
  */
 import { documentTypeLabel } from '../utils/format.js';
 
@@ -24,12 +25,22 @@ export function DonutChart({ data, size = 148, thickness = 22 }) {
 
   return (
     <div className="donut-wrap">
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Document type distribution">
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        role="img"
+        aria-label="Document type distribution"
+        style={{ animation: 'df-scale-in 700ms var(--ease-spring) both', flex: 'none' }}
+      >
         <g transform={`rotate(-90 ${size / 2} ${size / 2})`}>
           {entries.map(([key, value], index) => {
             const fraction = value / total;
             const dash = fraction * circumference;
-            const circle = (
+            const startOffset = offset;
+            offset += dash;
+
+            return (
               <circle
                 key={key}
                 cx={size / 2}
@@ -39,25 +50,50 @@ export function DonutChart({ data, size = 148, thickness = 22 }) {
                 stroke={PALETTE[index % PALETTE.length]}
                 strokeWidth={thickness}
                 strokeDasharray={`${Math.max(dash - 2, 0)} ${circumference}`}
-                strokeDashoffset={-offset}
+                strokeDashoffset={-startOffset}
                 strokeLinecap="butt"
+                style={{
+                  '--dash-from': circumference,
+                  '--dash-to': -startOffset,
+                  animation: 'df-draw 950ms var(--ease-out) both',
+                  animationDelay: `${index * 110}ms`,
+                }}
               />
             );
-            offset += dash;
-            return circle;
           })}
         </g>
-        <text x="50%" y="47%" textAnchor="middle" style={{ fontSize: 24, fontWeight: 700, fill: 'var(--text)' }}>
+        <text
+          x="50%"
+          y="47%"
+          textAnchor="middle"
+          style={{
+            fontSize: 24,
+            fontWeight: 700,
+            fill: 'var(--text)',
+            animation: 'df-pop-in 600ms var(--ease-spring) both',
+            animationDelay: '420ms',
+          }}
+        >
           {total}
         </text>
-        <text x="50%" y="62%" textAnchor="middle" style={{ fontSize: 11, fill: 'var(--text-subtle)' }}>
+        <text
+          x="50%"
+          y="62%"
+          textAnchor="middle"
+          style={{
+            fontSize: 11,
+            fill: 'var(--text-subtle)',
+            animation: 'df-fade-in 600ms var(--ease-out) both',
+            animationDelay: '560ms',
+          }}
+        >
           documents
         </text>
       </svg>
 
       <div className="donut-legend">
         {entries.map(([key, value], index) => (
-          <div key={key} className="legend-item">
+          <div key={key} className="legend-item" style={{ '--i': index }}>
             <span className="legend-swatch" style={{ background: PALETTE[index % PALETTE.length] }} />
             <span className="legend-label">{documentTypeLabel(key)}</span>
             <span className="legend-value">
@@ -89,14 +125,21 @@ export function BarList({ data, colour = 'var(--brand)' }) {
 
   return (
     <div className="bar-list">
-      {entries.map(([key, value]) => (
-        <div key={key} className="bar-item">
+      {entries.map(([key, value], index) => (
+        <div key={key} className="bar-item" style={{ '--i': index }}>
           <div className="bar-head">
             <span>{documentTypeLabel(key)}</span>
             <strong>{value}</strong>
           </div>
           <div className="bar-track">
-            <div className="bar-fill" style={{ width: `${(value / max) * 100}%`, background: colour }} />
+            <div
+              className="bar-fill"
+              style={{
+                width: `${(value / max) * 100}%`,
+                background: colour,
+                '--i': index,
+              }}
+            />
           </div>
         </div>
       ))}
@@ -119,16 +162,31 @@ export function ColumnChart({ data, height = 130 }) {
 
   return (
     <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, height, paddingTop: 8 }}>
-      {entries.map(([key, value]) => (
-        <div key={key} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+      {entries.map(([key, value], index) => (
+        <div
+          key={key}
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 6,
+            animation: 'df-fade-up 600ms var(--ease-out) both',
+            animationDelay: `${index * 90}ms`,
+          }}
+        >
           <span className="tiny bold">{value}</span>
           <div
+            className="chart-column"
             style={{
               width: '100%',
               maxWidth: 46,
               height: `${Math.max((value / max) * (height - 40), 4)}px`,
-              background: 'var(--brand)',
-              borderRadius: '5px 5px 0 0',
+              background: 'var(--brand-grad)',
+              borderRadius: '6px 6px 0 0',
+              transformOrigin: 'bottom center',
+              animation: 'df-grow-y 780ms var(--ease-out) both',
+              animationDelay: `${index * 90}ms`,
             }}
           />
           <span className="tiny subtle center" style={{ lineHeight: 1.2 }}>

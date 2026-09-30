@@ -97,6 +97,32 @@ DocuFlow AI is a complete pipeline rather than an OCR wrapper:
 | **Export** | JSON (structured), CSV (tabular), PDF report (document info, classification, extracted data, validation, confidence, review status) |
 | **Auth & tenancy** | Supabase Auth (or a labelled local fallback). Every route is protected; every query is scoped to the caller |
 | **Demo mode** | Runs the full pipeline with no external credentials, clearly labelled in the UI |
+| **Interface & motion** | Responsive glass-style UI with a layered design system, animated charts, staggered list entrances, scroll reveals, count-up statistics, animated pipeline stages and route transitions. Zero animation dependencies — all CSS keyframes plus two small hooks. Honours `prefers-reduced-motion` |
+
+---
+
+### Interface & motion
+
+The interface is built as a small design system in `frontend/src/styles/`:
+
+- **`animations.css`** — the motion layer: ~25 keyframes (fade / slide / scale / pop, shimmer, grow,
+  draw, float, pulse, typing, halo), entrance utilities that stagger via a `--i` index, scroll-reveal
+  classes, hover affordances, the ambient aurora background and the `prefers-reduced-motion` guard.
+- **`global.css`** — the visual layer: design tokens, glass surfaces, gradient accents, layered
+  shadows, and every component state.
+
+Two tiny hooks drive the JavaScript side:
+
+- **`useInView`** — `IntersectionObserver` wrapper for scroll reveals. Falls back to "visible" when
+  the API is missing and force-reveals after a grace period, so content can never get stuck invisible.
+- **`useCountUp`** — `requestAnimationFrame` number easing for stat readouts, snapping to the exact
+  target on the final frame.
+
+Three components consume them: `Reveal` (scroll-in wrapper with direction and stagger),
+`AnimatedNumber` (count-up figure) and `PageTransition` (replays the entrance on route change).
+
+No animation library is used — the dependency list stays at `react`, `react-dom` and
+`react-router-dom`.
 
 ---
 
@@ -219,6 +245,9 @@ Intelligent-Document-Processing/
 │   │   │   │   ├── DocumentPreview.jsx
 │   │   │   │   ├── StatusBadge.jsx
 │   │   │   │   ├── Charts.jsx
+│   │   │   │   ├── Reveal.jsx
+│   │   │   │   ├── AnimatedNumber.jsx
+│   │   │   │   ├── PageTransition.jsx
 │   │   │   │   ├── Modal.jsx
 │   │   │   │   ├── Toast.jsx
 │   │   │   │   └── States.jsx
@@ -233,7 +262,10 @@ Intelligent-Document-Processing/
 │   │   │   │   └── Settings.jsx
 │   │   │   ├── services/api.js
 │   │   │   ├── hooks/useAuth.jsx
+│   │   │   ├── hooks/useInView.js
+│   │   │   ├── hooks/useCountUp.js
 │   │   │   ├── utils/format.js
+│   │   │   ├── styles/animations.css
 │   │   │   ├── styles/global.css
 │   │   │   ├── App.jsx
 │   │   │   └── main.jsx

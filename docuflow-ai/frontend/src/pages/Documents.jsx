@@ -169,7 +169,7 @@ export default function Documents({ onDocumentsChanged }) {
       </div>
 
       {view === 'search' ? (
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 0 }}>
           <div className="card-body stack md">
             <form
               className="row"
@@ -258,7 +258,7 @@ export default function Documents({ onDocumentsChanged }) {
       ) : null}
 
       {view === 'compare' ? (
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 1 }}>
           <div className="card-body stack md">
             <p className="small muted">
               Select exactly two documents of the same type. The comparison shows the concrete extracted
@@ -303,12 +303,12 @@ export default function Documents({ onDocumentsChanged }) {
         />
       ) : view === 'grid' ? (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(258px, 1fr))', gap: 14 }}>
-          {list.map((document) => (
-            <DocumentCard key={document.id} document={document} onDelete={handleDelete} />
+          {list.map((document, index) => (
+            <DocumentCard key={document.id} document={document} index={index} onDelete={handleDelete} />
           ))}
         </div>
       ) : (
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 2 }}>
           <div className="card-body tight">
             <div className="table-wrap">
               <table className="data">
@@ -362,7 +362,7 @@ export default function Documents({ onDocumentsChanged }) {
       )}
 
       {view === 'search' && searchResults?.results.some((item) => item.matchedFields?.length) ? (
-        <div className="card">
+        <div className="card df-enter" style={{ '--i': 3 }}>
           <div className="card-header">
             <div>
               <h3>Matched fields</h3>
@@ -385,7 +385,7 @@ export default function Documents({ onDocumentsChanged }) {
                     .filter((item) => item.matchedFields?.length)
                     .flatMap((item) =>
                       item.matchedFields.map((field, index) => (
-                        <tr key={`${item.document.id}-${field.field}-${index}`}>
+                        <tr key={`${item.document.id}-${field.field}-${index}`} className="df-enter" style={{ '--i': index }}>
                           <td className="cell-muted truncate" style={{ maxWidth: 180 }}>
                             {item.document.fileName}
                           </td>
@@ -426,7 +426,7 @@ export default function Documents({ onDocumentsChanged }) {
             </div>
 
             {comparison.comparison.diff.changed.length ? (
-              <div className="card">
+              <div className="card df-enter" style={{ '--i': 4 }}>
                 <div className="card-header">
                   <h3>Changed values</h3>
                 </div>
@@ -458,7 +458,7 @@ export default function Documents({ onDocumentsChanged }) {
             {comparison.comparison.diff.added.length || comparison.comparison.diff.removed.length ? (
               <div className="chart-grid">
                 {comparison.comparison.diff.added.length ? (
-                  <div className="card">
+                  <div className="card df-enter" style={{ '--i': 5 }}>
                     <div className="card-header">
                       <h3>Added information</h3>
                     </div>
@@ -474,7 +474,7 @@ export default function Documents({ onDocumentsChanged }) {
                   </div>
                 ) : null}
                 {comparison.comparison.diff.removed.length ? (
-                  <div className="card">
+                  <div className="card df-enter" style={{ '--i': 6 }}>
                     <div className="card-header">
                       <h3>Removed information</h3>
                     </div>
@@ -493,7 +493,7 @@ export default function Documents({ onDocumentsChanged }) {
             ) : null}
 
             {comparison.comparison.listChanges.length ? (
-              <div className="card">
+              <div className="card df-enter" style={{ '--i': 7 }}>
                 <div className="card-header">
                   <h3>Changed clauses / list entries</h3>
                 </div>

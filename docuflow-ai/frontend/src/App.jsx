@@ -6,6 +6,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import Navbar from './components/Navbar.jsx';
 import Sidebar from './components/Sidebar.jsx';
+import PageTransition from './components/PageTransition.jsx';
 import { DemoModeBanner, Loading } from './components/States.jsx';
 import { useAuth } from './hooks/useAuth.jsx';
 import { api } from './services/api.js';
@@ -74,6 +75,12 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      <div className="df-aurora" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
+
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} reviewCount={reviewCount} />
 
       <div className="app-main">
@@ -82,16 +89,18 @@ export default function App() {
         <main className="app-content">
           <DemoModeBanner capabilities={capabilities} />
 
-          <Routes>
-            <Route path="/dashboard" element={<Dashboard onDocumentsChanged={loadReviewCount} />} />
-            <Route path="/documents" element={<Documents onDocumentsChanged={loadReviewCount} />} />
-            <Route path="/documents/:id" element={<DocumentDetails onDocumentsChanged={loadReviewCount} />} />
-            <Route path="/upload" element={<Upload onUploaded={loadReviewCount} />} />
-            <Route path="/review" element={<Review onReviewed={loadReviewCount} />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/settings" element={<Settings capabilities={capabilities} onRefresh={loadCapabilities} />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
+          <PageTransition>
+            <Routes>
+              <Route path="/dashboard" element={<Dashboard onDocumentsChanged={loadReviewCount} />} />
+              <Route path="/documents" element={<Documents onDocumentsChanged={loadReviewCount} />} />
+              <Route path="/documents/:id" element={<DocumentDetails onDocumentsChanged={loadReviewCount} />} />
+              <Route path="/upload" element={<Upload onUploaded={loadReviewCount} />} />
+              <Route path="/review" element={<Review onReviewed={loadReviewCount} />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/settings" element={<Settings capabilities={capabilities} onRefresh={loadCapabilities} />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </PageTransition>
         </main>
       </div>
     </div>
