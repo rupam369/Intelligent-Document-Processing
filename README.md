@@ -200,6 +200,8 @@ Google Cloud Vision, Azure AI Vision.
 ```
 Intelligent-Document-Processing/
 ├── docuflow-ai/
+│   ├── start-dev.sh            # one-command start (backend + frontend)
+│   ├── package.json            # convenience scripts (install:all, dev, build)
 │   ├── frontend/
 │   │   ├── public/
 │   │   ├── src/
@@ -307,7 +309,22 @@ Intelligent-Document-Processing/
 - npm 9 or newer
 - (Optional) a Supabase project and an AI / OCR API key
 
-### 1. Install dependencies
+### Fastest start — one command
+
+From `docuflow-ai/`, this installs dependencies if needed, creates `backend/.env` from the example,
+starts the API on `:5000` and the UI on `:5173`:
+
+```bash
+cd docuflow-ai
+./start-dev.sh
+```
+
+Then open <http://localhost:5173> and sign in with `demo@docuflow.ai` / `demo1234`.
+Use `./start-dev.sh --build` to serve the production build on `:4173` instead.
+
+### Manual start
+
+#### 1. Install dependencies
 
 ```bash
 # Backend

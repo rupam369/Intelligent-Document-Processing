@@ -12,26 +12,31 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
-    port: 5173,
+    // Ports are overridable so the bundled start script can run several copies.
+    port: Number(process.env.VITE_PORT || 5173),
     strictPort: false,
     // Accept requests addressed to any host (needed for sandbox/preview hosts).
     // This only affects the local dev server - production builds are static.
     allowedHosts: true,
     proxy: {
       '/api': {
-        target: process.env.VITE_API_PROXY_TARGET || 'http://localhost:5000',
+        target:
+          process.env.VITE_API_PROXY_TARGET ||
+          `http://localhost:${process.env.API_PORT || 5000}`,
         changeOrigin: true,
       },
     },
   },
   preview: {
     host: '0.0.0.0',
-    port: 4173,
+    port: Number(process.env.VITE_PREVIEW_PORT || 4173),
     allowedHosts: true,
     // `vite preview` does not inherit `server.proxy`, so repeat it here.
     proxy: {
       '/api': {
-        target: process.env.VITE_API_PROXY_TARGET || 'http://localhost:5000',
+        target:
+          process.env.VITE_API_PROXY_TARGET ||
+          `http://localhost:${process.env.API_PORT || 5000}`,
         changeOrigin: true,
       },
     },
