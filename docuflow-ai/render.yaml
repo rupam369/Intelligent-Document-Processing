@@ -1,0 +1,55 @@
+# Render Blueprint - deploys the DocuFlow AI backend as a Web Service.
+#
+# Dashboard equivalent: New + -> Web Service -> connect this repo ->
+#   Root directory : docuflow-ai/backend
+#   Build command  : npm install
+#   Start command  : npm start
+#
+# Add every variable from backend/.env.example in the Render dashboard
+# (Environment -> Environment Variables). Mark AI_API_KEY, OCR_API_KEY and
+# SUPABASE_SERVICE_ROLE_KEY as secret so they are never printed in logs.
+
+services:
+  - type: web
+    name: docuflow-ai-backend
+    runtime: node
+    plan: free
+    rootDir: docuflow-ai/backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      # Set this to your deployed frontend URL, comma separated for several.
+      - key: CORS_ORIGIN
+        sync: false
+      # Supabase
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: documents
+      # AI / OCR providers
+      - key: AI_PROVIDER
+        value: mock
+      - key: AI_API_KEY
+        sync: false
+      - key: AI_MODEL
+        sync: false
+      - key: OCR_PROVIDER
+        value: mock
+      - key: OCR_API_KEY
+        sync: false
+      # Uploads
+      - key: MAX_FILE_SIZE_MB
+        value: 15
+      # Auth
+      - key: DEMO_JWT_SECRET
+        generateValue: true

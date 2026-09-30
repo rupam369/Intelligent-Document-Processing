@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Environment - NEVER commit real credentials
+.env
+.env.local
+.env.*.local
+.env.production
+
+# Build output
+dist/
+build/
+
+# Backend runtime data (demo store + uploaded documents)
+backend/data/
+backend/data/uploads/
+backend/data/*.json
+backend/data/*.tmp
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+coverage/
+.nyc_output/

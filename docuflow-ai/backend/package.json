@@ -1,0 +1,22 @@
+{
+  "name": "docuflow-ai-backend",
+  "version": "1.0.0",
+  "description": "DocuFlow AI - Intelligent Document Processing Platform (Backend API)",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node scripts/seedDemoData.js",
+    "lint": "node --check server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^2.4.0"
+  }
+}
